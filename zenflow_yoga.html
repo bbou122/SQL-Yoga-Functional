@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ZenFlow Yoga Studio</title>
+<style>
+:root {
+  --sage:    #6b8f71;
+  --sage-d:  #4a6b50;
+  --sage-l:  #a8c5ac;
+  --sage-bg: #f0f5f1;
+  --cream:   #fdf8f2;
+  --warm:    #c9a96e;
+  --warm-d:  #a8834a;
+  --charcoal:#2d3436;
+  --mid:     #636e72;
+  --light:   #b2bec3;
+  --white:   #ffffff;
+  --danger:  #d63031;
+  --success: #00b894;
+  --radius:  12px;
+  --shadow:  0 4px 20px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.14);
+  --trans:   all .25s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+
+/* ── TYPOGRAPHY ── */
+h1{font-size:2.6rem;font-weight:700;line-height:1.2;}
+h2{font-size:1.9rem;font-weight:600;}
+h3{font-size:1.3rem;font-weight:600;}
+p{line-height:1.6;}
+
+/* ── UTILITY ── */
+.hidden{display:none!important;}
+.flex{display:flex;}
+.flex-col{display:flex;flex-direction:column;}
+.items-center{align-items:center;}
+.justify-between{justify-content:space-between;}
+.gap-1{gap:.5rem;}
+.gap-2{gap:1rem;}
+.gap-3{gap:1.5rem;}
+.mt-1{margin-top:.5rem;}
+.mt-2{margin-top:1rem;}
+.mt-3{margin-top:1.5rem;}
+.bold{font-weight:600;}
+.muted{color:var(--mid);font-size:.9rem;}
+.text-center{text-align:center;}
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:20px;font-size:.75rem;font-weight:600;}
+.badge-green{background:#d4edda;color:#155724;}
+.badge-gold{background:#fff3cd;color:#856404;}
+.badge-red{background:#f8d7da;color:#721c24;}
+.badge-sage{background:var(--sage-bg);color:var(--sage-d);}
+.badge-grey{background:#e9ecef;color:var(--mid);}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;border-radius:8px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;transition:var(--trans);}
+.btn-primary{background:var(--sage);color:var(--white);}
+.btn-primary:hover{background:var(--sage-d);}
+.btn-secondary{background:transparent;color:var(--sage);border:2px solid var(--sage);}
+.btn-secondary:hover{background:var(--sage);color:var(--white);}
+.btn-warm{background:var(--warm);color:var(--white);}
+.btn-warm:hover{background:var(--warm-d);}
+.btn-ghost{background:transparent;color:var(--charcoal);border:1px solid var(--light);}
+.btn-ghost:hover{background:var(--sage-bg);}
+.btn-danger{background:var(--danger);color:var(--white);}
+.btn-danger:hover{background:#b71c1c;}
+.btn-sm{padding:.4rem .9rem;font-size:.82rem;}
+.btn-full{width:100%;justify-content:center;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ── CARD ── */
+.card{background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);}
+.card-hover:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);transition:var(--trans);}
+
+/* ── FORMS ── */
+.form-group{display:flex;flex-direction:column;gap:.4rem;}
+.form-group label{font-size:.85rem;font-weight:600;color:var(--mid);}
+.form-group input,.form-group select,.form-group textarea{
+  padding:.7rem 1rem;border:1.5px solid #dfe6e9;border-radius:8px;
+  font-size:.95rem;font-family:inherit;transition:var(--trans);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  outline:none;border-color:var(--sage);box-shadow:0 0 0 3px rgba(107,143,113,.15);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+/* ── NAVBAR ── */
+#navbar{
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid #eee;
+  padding:.9rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-size:1.4rem;font-weight:700;color:var(--sage);}
+.nav-logo span{color:var(--warm);}
+.nav-links{display:flex;align-items:center;gap:1.8rem;}
+.nav-links a,.nav-links button{
+  background:none;border:none;font-size:.92rem;font-weight:500;
+  color:var(--mid);cursor:pointer;transition:var(--trans);padding:0;}
+.nav-links a:hover,.nav-links button:hover{color:var(--sage);}
+.nav-links .active{color:var(--sage);font-weight:600;}
+
+/* ── TOAST ── */
+#toast-container{position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;gap:.5rem;}
+.toast{
+  background:var(--charcoal);color:var(--white);
+  padding:.85rem 1.4rem;border-radius:10px;
+  font-size:.9rem;font-weight:500;
+  animation:slideUp .3s ease;
+  box-shadow:0 4px 15px rgba(0,0,0,.2);
+}
+.toast.success{background:var(--success);}
+.toast.error{background:var(--danger);}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal{
+  background:var(--white);border-radius:var(--radius);
+  padding:2rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;
+  box-shadow:var(--shadow-lg);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.modal-header h3{font-size:1.3rem;}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--mid);line-height:1;}
+
+/* ── PAGES ── */
+.page{display:none;min-height:calc(100vh - 65px);}
+.page.active{display:block;}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem;}
+.section{padding:4rem 0;}
+
+/* ── HERO ── */
+#hero{
+  background:linear-gradient(135deg,var(--sage-d) 0%,var(--sage) 50%,var(--sage-l) 100%);
+  padding:6rem 2rem;text-align:center;color:white;position:relative;overflow:hidden;
+}
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+#hero h1{font-size:3.2rem;margin-bottom:1rem;position:relative;}
+#hero p{font-size:1.2rem;opacity:.9;max-width:560px;margin:0 auto 2.5rem;position:relative;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;position:relative;}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;}
+.feature-card{text-align:center;padding:2rem;}
+.feature-icon{font-size:2.5rem;margin-bottom:1rem;display:block;}
+
+/* ── SCHEDULE ── */
+.schedule-filters{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem;align-items:center;}
+.filter-btn{padding:.45rem 1.1rem;border-radius:20px;border:1.5px solid var(--light);background:var(--white);font-size:.85rem;font-weight:500;cursor:pointer;transition:var(--trans);}
+.filter-btn.active,.filter-btn:hover{background:var(--sage);color:white;border-color:var(--sage);}
+.classes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;}
+.class-card{border-radius:var(--radius);background:var(--white);box-shadow:var(--shadow);overflow:hidden;transition:var(--trans);}
+.class-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);}
+.class-card-header{padding:1.2rem;background:var(--sage-bg);border-bottom:1px solid #e0eae2;}
+.class-card-header h3{font-size:1.05rem;color:var(--sage-d);}
+.class-card-body{padding:1.2rem;}
+.class-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.6rem;}
+.class-meta span{display:flex;align-items:center;gap:.3rem;font-size:.82rem;color:var(--mid);}
+.spots-bar{background:#eee;border-radius:4px;height:6px;margin-top:.5rem;overflow:hidden;}
+.spots-fill{height:100%;background:var(--sage);border-radius:4px;transition:width .5s ease;}
+.spots-fill.low{background:var(--warm);}
+.spots-fill.full{background:var(--danger);}
+
+/* ── DASHBOARD ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1.2rem;margin-bottom:2rem;}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);text-align:center;}
+.stat-card .stat-num{font-size:2.2rem;font-weight:700;color:var(--sage);}
+.stat-card .stat-label{font-size:.82rem;color:var(--mid);margin-top:.2rem;}
+
+/* ── PACKAGES ── */
+.packages-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+.pkg-card{border-radius:var(--radius);background:var(--white);box-shadow:var(--shadow);padding:2rem;text-align:center;position:relative;transition:var(--trans);}
+.pkg-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);}
+.pkg-card.popular::before{content:'Most Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--warm);color:white;font-size:.72rem;font-weight:700;padding:.2rem .8rem;border-radius:20px;}
+.pkg-price{font-size:2.4rem;font-weight:700;color:var(--sage);margin:1rem 0 .25rem;}
+.pkg-price span{font-size:1rem;font-weight:400;color:var(--mid);}
+.pkg-classes{font-size:.9rem;color:var(--mid);margin-bottom:1.5rem;}
+
+/* ── INSTRUCTOR PORTAL ── */
+.portal-grid{display:grid;grid-template-columns:280px 1fr;gap:2rem;}
+.portal-sidebar{display:flex;flex-direction:column;gap:1rem;}
+.instructor-card{background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);text-align:center;}
+.instructor-avatar{width:80px;height:80px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;margin:0 auto 1rem;}
+.my-classes-list{display:flex;flex-direction:column;gap:.75rem;}
+.my-class-item{background:var(--white);border-radius:var(--radius);padding:1rem 1.2rem;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.9rem;}
+th{background:var(--sage-bg);padding:.8rem 1rem;text-align:left;font-weight:600;color:var(--sage-d);white-space:nowrap;}
+td{padding:.8rem 1rem;border-bottom:1px solid #f0f0f0;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafcfa;}
+
+/* ── PROFILE PAGE ── */
+.profile-layout{display:grid;grid-template-columns:280px 1fr;gap:2rem;}
+.profile-sidebar{display:flex;flex-direction:column;gap:1rem;}
+.profile-avatar-big{width:100px;height:100px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:white;margin:0 auto 1rem;}
+
+/* ── AUTH TABS ── */
+.auth-tabs{display:flex;border-bottom:2px solid var(--sage-bg);margin-bottom:1.5rem;}
+.auth-tab{flex:1;padding:.75rem;text-align:center;font-weight:600;cursor:pointer;border:none;background:none;color:var(--mid);transition:var(--trans);}
+.auth-tab.active{color:var(--sage);border-bottom:2px solid var(--sage);margin-bottom:-2px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  h1{font-size:2rem;}
+  #hero h1{font-size:2.2rem;}
+  .portal-grid,.profile-layout{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .nav-links{gap:1rem;}
+  .hero-btns{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-logo">Zen<span>Flow</span></div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a>
+    <a href="#" onclick="showPage('schedule')" id="nav-schedule">Schedule</a>
+    <a href="#" onclick="showPage('packages')" id="nav-packages">Packages</a>
+    <span id="nav-auth-section">
+      <button onclick="openAuthModal()">Sign In</button>
+      <button class="btn btn-primary btn-sm" onclick="openAuthModal('register')">Join Now</button>
+    </span>
+    <span id="nav-user-section" class="hidden" style="display:flex;align-items:center;gap:1rem;">
+      <a href="#" onclick="showPage('dashboard')" id="nav-dashboard">My Dashboard</a>
+      <a href="#" onclick="showPage('profile')" id="nav-profile">Profile</a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Sign Out</button>
+    </span>
+    <span id="nav-instructor-section" class="hidden">
+      <a href="#" onclick="showPage('instructor')">Instructor Portal</a>
+    </span>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <!-- Hero -->
+  <section id="hero">
+    <h1>Find Your Flow 🧘</h1>
+    <p>World-class yoga instruction, flexible memberships, and a welcoming community — all in one place.</p>
+    <div class="hero-btns">
+      <button class="btn btn-warm" onclick="showPage('schedule')">Browse Classes</button>
+      <button class="btn btn-secondary" style="border-color:white;color:white;" onclick="openAuthModal('register')">Get Started Free</button>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:3rem;">
+        <h2>Why Choose ZenFlow?</h2>
+        <p class="muted mt-1">Everything you need for a consistent, joyful practice.</p>
+      </div>
+      <div class="features-grid">
+        <div class="card feature-card">
+          <span class="feature-icon">🗓️</span>
+          <h3>Easy Scheduling</h3>
+          <p class="muted mt-1">Browse the full class schedule, filter by style or difficulty, and book in seconds.</p>
+        </div>
+        <div class="card feature-card">
+          <span class="feature-icon">🎯</span>
+          <h3>Flexible Packages</h3>
+          <p class="muted mt-1">From single drop-ins to unlimited monthly plans — options for every lifestyle.</p>
+        </div>
+        <div class="card feature-card">
+          <span class="feature-icon">🧑‍🏫</span>
+          <h3>Expert Instructors</h3>
+          <p class="muted mt-1">Our certified team brings diverse styles and deep expertise to every class.</p>
+        </div>
+        <div class="card feature-card">
+          <span class="feature-icon">📊</span>
+          <h3>Track Your Journey</h3>
+          <p class="muted mt-1">Your personal dashboard shows class history, balance, and upcoming bookings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet Instructors -->
+  <section class="section" style="background:var(--sage-bg);padding:4rem 0;">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:3rem;">
+        <h2>Meet Our Instructors</h2>
+        <p class="muted mt-1">Passionate teachers dedicated to your practice.</p>
+      </div>
+      <div id="instructors-grid" class="features-grid"></div>
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center;">
+        <div><div style="font-size:2.8rem;font-weight:700;color:var(--sage);">25+</div><div class="muted">Weekly Classes</div></div>
+        <div><div style="font-size:2.8rem;font-weight:700;color:var(--sage);">5</div><div class="muted">Expert Instructors</div></div>
+        <div><div style="font-size:2.8rem;font-weight:700;color:var(--sage);">500+</div><div class="muted">Happy Members</div></div>
+        <div><div style="font-size:2.8rem;font-weight:700;color:var(--sage);">10+</div><div class="muted">Class Styles</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: SCHEDULE
+═══════════════════════════════════════════════════════ -->
+<div id="page-schedule" class="page">
+  <div class="container section">
+    <div class="flex items-center justify-between" style="margin-bottom:2rem;">
+      <div>
+        <h2>Class Schedule</h2>
+        <p class="muted mt-1">Filter, explore, and book your next session.</p>
+      </div>
+    </div>
+    <div class="schedule-filters">
+      <strong style="font-size:.85rem;color:var(--mid);margin-right:.25rem;">Filter:</strong>
+      <button class="filter-btn active" onclick="filterClasses('all',this)">All Classes</button>
+      <button class="filter-btn" onclick="filterClasses('Beginner',this)">Beginner</button>
+      <button class="filter-btn" onclick="filterClasses('Intermediate',this)">Intermediate</button>
+      <button class="filter-btn" onclick="filterClasses('Advanced',this)">Advanced</button>
+      <button class="filter-btn" onclick="filterClasses('All Levels',this)">All Levels</button>
+    </div>
+    <div id="classes-grid" class="classes-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: PACKAGES
+═══════════════════════════════════════════════════════ -->
+<div id="page-packages" class="page">
+  <div class="container section">
+    <div class="text-center" style="margin-bottom:3rem;">
+      <h2>Membership & Packages</h2>
+      <p class="muted mt-1">Choose what works for your schedule and budget.</p>
+    </div>
+
+    <h3 style="margin-bottom:1.2rem;">Monthly Memberships</h3>
+    <div id="memberships-grid" class="packages-grid" style="margin-bottom:3rem;"></div>
+
+    <h3 style="margin-bottom:1.2rem;">Class Packages (Drop-In)</h3>
+    <div id="packages-grid" class="packages-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: DASHBOARD
+═══════════════════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="container section">
+    <h2>My Dashboard</h2>
+    <p class="muted mt-1">Welcome back, <span id="dash-name">—</span>!</p>
+
+    <div class="stat-grid mt-3">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-balance">0</div>
+        <div class="stat-label">Class Credits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-upcoming">0</div>
+        <div class="stat-label">Upcoming Classes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-attended">0</div>
+        <div class="stat-label">Classes Attended</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-membership">—</div>
+        <div class="stat-label">Membership</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1rem;" id="dash-cols">
+      <div>
+        <div class="flex items-center justify-between" style="margin-bottom:1rem;">
+          <h3>My Registered Classes</h3>
+          <button class="btn btn-primary btn-sm" onclick="showPage('schedule')">Book a Class</button>
+        </div>
+        <div id="my-classes-list" class="flex-col gap-2"></div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between" style="margin-bottom:1rem;">
+          <h3>Purchase History</h3>
+        </div>
+        <div id="my-sales-list" class="flex-col gap-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: PROFILE
+═══════════════════════════════════════════════════════ -->
+<div id="page-profile" class="page">
+  <div class="container section">
+    <h2>My Profile</h2>
+    <div class="profile-layout mt-3">
+      <div class="profile-sidebar">
+        <div class="card text-center">
+          <div class="profile-avatar-big" id="prof-avatar">?</div>
+          <h3 id="prof-fullname">—</h3>
+          <p class="muted" id="prof-email-display">—</p>
+          <p class="muted mt-1" style="font-size:.8rem;" id="prof-member-since">Member since —</p>
+          <div class="mt-2" id="prof-membership-badge"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:.75rem;">Quick Actions</h3>
+          <div class="flex-col gap-1">
+            <button class="btn btn-primary btn-full" onclick="showPage('schedule')">Book a Class</button>
+            <button class="btn btn-secondary btn-full" onclick="showPage('packages')">Buy Credits</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3 style="margin-bottom:1.5rem;">Edit Profile</h3>
+          <form id="profile-form" onsubmit="saveProfile(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="prof-fname" required/>
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="prof-lname" required/>
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <label>Email</label>
+              <input type="email" id="prof-email" required/>
+            </div>
+            <div class="form-row mt-2">
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="prof-phone"/>
+              </div>
+              <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="prof-dob"/>
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <label>Gender</label>
+              <select id="prof-gender">
+                <option value="">Prefer not to say</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE: INSTRUCTOR PORTAL
+═══════════════════════════════════════════════════════ -->
+<div id="page-instructor" class="page">
+  <div class="container section">
+    <h2>Instructor Portal</h2>
+    <p class="muted mt-1">Manage your classes and schedule.</p>
+    <div class="portal-grid mt-3">
+      <div class="portal-sidebar">
+        <div class="instructor-card card">
+          <div class="instructor-avatar" id="inst-avatar">?</div>
+          <h3 id="inst-name">—</h3>
+          <p class="muted" id="inst-specialty">—</p>
+          <div class="mt-2">
+            <span class="badge badge-sage" id="inst-class-count">0 classes</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:1rem;">Schedule a New Class</h3>
+          <form id="schedule-form" onsubmit="scheduleClass(event)">
+            <div class="form-group">
+              <label>Class Name</label>
+              <input type="text" id="sched-name" placeholder="e.g. Morning Vinyasa" required/>
+            </div>
+            <div class="form-group mt-2">
+              <label>Difficulty</label>
+              <select id="sched-diff">
+                <option>Beginner</option>
+                <option selected>All Levels</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+              </select>
+            </div>
+            <div class="form-group mt-2">
+              <label>Date</label>
+              <input type="date" id="sched-date" required/>
+            </div>
+            <div class="form-row mt-2">
+              <div class="form-group">
+                <label>Start Time</label>
+                <input type="time" id="sched-start" required/>
+              </div>
+              <div class="form-group">
+                <label>End Time</label>
+                <input type="time" id="sched-end" required/>
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <label>Max Spots</label>
+              <input type="number" id="sched-spots" value="20" min="1" max="50"/>
+            </div>
+            <div class="form-group mt-2">
+              <label>Room Temp (°F)</label>
+              <input type="number" id="sched-temp" value="72" min="65" max="110"/>
+            </div>
+            <div class="form-group mt-2">
+              <label>Description</label>
+              <textarea id="sched-desc" rows="2" placeholder="Brief class description..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full mt-3">Add to Schedule</button>
+          </form>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between" style="margin-bottom:1rem;">
+          <h3>Your Classes</h3>
+        </div>
+        <div id="instructor-classes-list" class="flex-col gap-2"></div>
+
+        <h3 style="margin:2rem 0 1rem;">Student Roster</h3>
+        <div id="roster-section">
+          <p class="muted">Click "View Roster" on a class to see registered students.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     AUTH MODAL
+═══════════════════════════════════════════════════════ -->
+<div id="auth-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Welcome to ZenFlow</h3>
+      <button class="modal-close" onclick="closeModal('auth-modal')">×</button>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+    <!-- Sign In -->
+    <div id="signin-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signin-email" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group mt-2">
+        <label>Password</label>
+        <input type="password" id="signin-password" placeholder="••••••••"/>
+      </div>
+      <p class="muted mt-1" style="font-size:.8rem;">Demo: any existing email + any password. Or use instructor login: alice@zenflow.com</p>
+      <button class="btn btn-primary btn-full mt-3" onclick="signIn()">Sign In</button>
+      <p class="muted text-center mt-2" style="font-size:.85rem;">Don't have an account? <a href="#" onclick="switchAuthTab('register')" style="color:var(--sage);">Register here</a></p>
+    </div>
+    <!-- Register -->
+    <div id="register-form" class="hidden">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="reg-fname" placeholder="Jane"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="reg-lname" placeholder="Doe"/>
+        </div>
+      </div>
+      <div class="form-group mt-2">
+        <label>Email</label>
+        <input type="email" id="reg-email" placeholder="jane@example.com"/>
+      </div>
+      <div class="form-group mt-2">
+        <label>Phone</label>
+        <input type="tel" id="reg-phone" placeholder="(555) 000-0000"/>
+      </div>
+      <div class="form-row mt-2">
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" id="reg-dob"/>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="reg-gender">
+            <option value="">Prefer not to say</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group mt-2">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Min 6 characters"/>
+      </div>
+      <button class="btn btn-primary btn-full mt-3" onclick="registerUser()">Create Account</button>
+      <p class="muted text-center mt-2" style="font-size:.85rem;">Already have an account? <a href="#" onclick="switchAuthTab('signin')" style="color:var(--sage);">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING MODAL -->
+<div id="book-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="book-class-name">Book Class</h3>
+      <button class="modal-close" onclick="closeModal('book-modal')">×</button>
+    </div>
+    <div id="book-details" class="muted" style="margin-bottom:1.5rem;"></div>
+    <div id="book-balance-info" class="card" style="background:var(--sage-bg);margin-bottom:1.5rem;"></div>
+    <div class="flex gap-2">
+      <button class="btn btn-primary" id="confirm-book-btn" onclick="confirmBook()">Confirm Booking</button>
+      <button class="btn btn-ghost" onclick="closeModal('book-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PURCHASE MODAL -->
+<div id="purchase-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="purchase-title">Purchase Package</h3>
+      <button class="modal-close" onclick="closeModal('purchase-modal')">×</button>
+    </div>
+    <div id="purchase-details" style="margin-bottom:1.5rem;"></div>
+    <div class="form-group">
+      <label>Payment Method</label>
+      <select id="purchase-payment">
+        <option value="Credit Card">Credit Card</option>
+        <option value="Debit Card">Debit Card</option>
+        <option value="Cash">Cash</option>
+        <option value="PayPal">PayPal</option>
+      </select>
+    </div>
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-warm" onclick="confirmPurchase()">Complete Purchase</button>
+      <button class="btn btn-ghost" onclick="closeModal('purchase-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  IN-MEMORY DATABASE
+// ════════════════════════════════════════════════════════════
+const DB = {
+  customers: [
+    {id:1,fname:'John',lname:'Doe',email:'john.doe@example.com',phone:'1234567890',gender:'M',dob:'1990-01-01',joindate:'2020-01-15',classbalance:5,password:'demo'},
+    {id:2,fname:'Jane',lname:'Smith',email:'jane.smith@example.com',phone:'0987654321',gender:'F',dob:'1992-05-15',joindate:'2020-02-10',classbalance:10,password:'demo'},
+    {id:3,fname:'Michael',lname:'Johnson',email:'michael.johnson@example.com',phone:'5678901234',gender:'M',dob:'1985-09-20',joindate:'2019-12-20',classbalance:7,password:'demo'},
+    {id:4,fname:'Emily',lname:'Williams',email:'emily.williams@example.com',phone:'9876543210',gender:'F',dob:'1988-03-12',joindate:'2020-03-05',classbalance:3,password:'demo'},
+    {id:5,fname:'Daniel',lname:'Brown',email:'daniel.brown@example.com',phone:'2345678901',gender:'M',dob:'1993-07-25',joindate:'2020-04-18',classbalance:8,password:'demo'},
+  ],
+  instructors: [
+    {id:1,fname:'Alice',lname:'Smith',email:'alice@zenflow.com',phone:'123-456-7890',dob:'1980-05-15',startdate:'2010-01-01',gender:'F',bio:'Alice has been teaching yoga for over 15 years with certifications in Hatha and Vinyasa.',specialty:'Vinyasa, Hatha'},
+    {id:2,fname:'Bob',lname:'Johnson',email:'bob@zenflow.com',phone:'987-654-3210',dob:'1975-08-20',startdate:'2008-06-15',gender:'M',bio:'Bob is a former athlete turned wellness coach specializing in Power and Ashtanga yoga.',specialty:'Power Yoga, Ashtanga'},
+    {id:3,fname:'Eva',lname:'Brown',email:'eva@zenflow.com',phone:'234-567-8901',dob:'1983-02-10',startdate:'2012-03-20',gender:'F',bio:'Eva is a certified meditation teacher and Yin yoga specialist.',specialty:'Yin, Restorative, Meditation'},
+    {id:4,fname:'Marcus',lname:'Lee',email:'marcus@zenflow.com',phone:'345-678-9012',dob:'1988-11-03',startdate:'2015-07-01',gender:'M',bio:'Marcus combines movement and mindfulness, specializing in Kundalini and breathwork.',specialty:'Kundalini, Breathwork'},
+    {id:5,fname:'Priya',lname:'Patel',email:'priya@zenflow.com',phone:'456-789-0123',dob:'1991-04-22',startdate:'2018-09-01',gender:'F',bio:'Priya is an E-RYT 500 instructor passionate about making yoga accessible.',specialty:'Beginner, Chair Yoga, Prenatal'},
+  ],
+  classes: [
+    {id:1,name:'Yoga Basics',temp:32.5,start:'08:00',end:'09:00',date:'2026-06-25',spots:20,total:20,instructorId:1,difficulty:'Beginner',desc:'Foundation poses and breathing techniques for new yogis.'},
+    {id:2,name:'Vinyasa Flow',temp:34,start:'10:00',end:'11:00',date:'2026-06-25',spots:15,total:15,instructorId:1,difficulty:'Intermediate',desc:'A dynamic sequence linking breath to movement.'},
+    {id:3,name:'Hatha Yoga',temp:31,start:'12:00',end:'13:00',date:'2026-06-25',spots:18,total:18,instructorId:2,difficulty:'All Levels',desc:'Classic postures held with mindful alignment.'},
+    {id:4,name:'Power Yoga',temp:35,start:'14:00',end:'15:00',date:'2026-06-25',spots:22,total:22,instructorId:2,difficulty:'Advanced',desc:'High-intensity yoga for strength and endurance.'},
+    {id:5,name:'Restorative Yoga',temp:30,start:'16:00',end:'17:00',date:'2026-06-25',spots:25,total:25,instructorId:3,difficulty:'All Levels',desc:'Supported poses held for deep relaxation and recovery.'},
+    {id:6,name:'Yin Yoga',temp:33,start:'08:00',end:'09:00',date:'2026-06-26',spots:18,total:18,instructorId:3,difficulty:'All Levels',desc:'Long-held poses targeting deep connective tissue.'},
+    {id:7,name:'Ashtanga Yoga',temp:36,start:'10:00',end:'11:00',date:'2026-06-26',spots:20,total:20,instructorId:2,difficulty:'Advanced',desc:'A rigorous set sequence building heat and focus.'},
+    {id:8,name:'Kundalini Yoga',temp:34.5,start:'12:00',end:'13:00',date:'2026-06-26',spots:15,total:15,instructorId:4,difficulty:'All Levels',desc:'Dynamic kriyas and meditation to awaken energy.'},
+    {id:9,name:'Chair Yoga',temp:28,start:'14:00',end:'15:00',date:'2026-06-26',spots:12,total:12,instructorId:5,difficulty:'Beginner',desc:'Accessible yoga using a chair for support.'},
+    {id:10,name:'Aerial Yoga',temp:37,start:'16:00',end:'17:00',date:'2026-06-26',spots:10,total:10,instructorId:1,difficulty:'Intermediate',desc:'Yoga using a silk hammock for inversions and core work.'},
+    {id:11,name:'Hot Yoga',temp:35.5,start:'08:00',end:'09:00',date:'2026-06-27',spots:22,total:22,instructorId:2,difficulty:'All Levels',desc:'Flowing sequences in a heated room to build flexibility.'},
+    {id:12,name:'Iyengar Yoga',temp:32,start:'10:00',end:'11:00',date:'2026-06-27',spots:18,total:18,instructorId:1,difficulty:'All Levels',desc:'Precision alignment using props for therapeutic benefit.'},
+    {id:13,name:'AcroYoga',temp:36.5,start:'12:00',end:'13:00',date:'2026-06-27',spots:15,total:15,instructorId:4,difficulty:'Intermediate',desc:'Partner-based acrobatics and yoga — trust and play.'},
+    {id:14,name:'Prenatal Yoga',temp:29,start:'14:00',end:'15:00',date:'2026-06-27',spots:20,total:20,instructorId:5,difficulty:'All Levels',desc:'Gentle sequences designed for expectant mothers.'},
+    {id:15,name:'Yoga for Seniors',temp:27.5,start:'16:00',end:'17:00',date:'2026-06-27',spots:18,total:18,instructorId:5,difficulty:'Beginner',desc:'Low-impact yoga tailored for older adults.'},
+    {id:16,name:'Core Power Yoga',temp:34,start:'08:00',end:'09:00',date:'2026-06-28',spots:25,total:25,instructorId:2,difficulty:'Advanced',desc:'Strength-focused flow targeting core stability.'},
+    {id:17,name:'Yoga Nidra',temp:30.5,start:'10:00',end:'11:00',date:'2026-06-28',spots:15,total:15,instructorId:3,difficulty:'All Levels',desc:'Guided deep-relaxation practice — "yogic sleep".'},
+    {id:18,name:'Mindfulness Yoga',temp:31.5,start:'12:00',end:'13:00',date:'2026-06-28',spots:20,total:20,instructorId:3,difficulty:'All Levels',desc:'Slow, intentional movement paired with mindfulness cues.'},
+    {id:19,name:'Pilates',temp:33,start:'14:00',end:'15:00',date:'2026-06-28',spots:18,total:18,instructorId:4,difficulty:'All Levels',desc:'Core-centered movement for posture and strength.'},
+    {id:20,name:'Gentle Flow Yoga',temp:29.5,start:'16:00',end:'17:00',date:'2026-06-28',spots:22,total:22,instructorId:5,difficulty:'Beginner',desc:'Soft flowing movements for stress relief.'},
+    {id:21,name:'Beginner Yoga',temp:28,start:'08:00',end:'09:00',date:'2026-06-29',spots:20,total:20,instructorId:5,difficulty:'Beginner',desc:'The perfect starting point for your yoga journey.'},
+    {id:22,name:'Advanced Yoga',temp:36,start:'10:00',end:'11:00',date:'2026-06-29',spots:15,total:15,instructorId:2,difficulty:'Advanced',desc:'Challenging sequences for experienced practitioners.'},
+    {id:23,name:'Yoga Therapy',temp:32.5,start:'12:00',end:'13:00',date:'2026-06-29',spots:18,total:18,instructorId:1,difficulty:'All Levels',desc:'Therapeutic yoga addressing specific physical concerns.'},
+    {id:24,name:'Yoga Sculpt',temp:35,start:'14:00',end:'15:00',date:'2026-06-29',spots:22,total:22,instructorId:4,difficulty:'Intermediate',desc:'Yoga with light weights for a full-body sculpting workout.'},
+    {id:25,name:'Meditation Class',temp:25,start:'16:00',end:'17:00',date:'2026-06-29',spots:25,total:25,instructorId:3,difficulty:'All Levels',desc:'Guided meditation for clarity, calm, and focus.'},
+  ],
+  packages: [
+    {id:1,desc:'Single Class',price:18,numClasses:1},
+    {id:2,desc:'5-Class Pass',price:80,numClasses:5},
+    {id:3,desc:'10-Class Pass',price:140,numClasses:10},
+    {id:4,desc:'20-Class Pass',price:240,numClasses:20},
+  ],
+  membershipTypes: [
+    {id:2,name:'Basic',desc:'4 classes/month. Perfect for beginners.',price:39,classes:4},
+    {id:3,name:'Standard',desc:'8 classes/month. Most popular.',price:65,classes:8,popular:true},
+    {id:4,name:'Unlimited',desc:'Unlimited classes every month.',price:99,classes:null},
+    {id:5,name:'Annual Unlimited',desc:'Unlimited classes, billed annually. Save 20%.',price:79,classes:null},
+  ],
+  registrations: [
+    {id:1,customerId:2,classId:6,date:'2026-06-25',status:'REGISTERED'},
+    {id:2,customerId:3,classId:3,date:'2026-06-25',status:'ATTENDED'},
+  ],
+  sales: [
+    {id:1,customerId:1,packageId:2,date:'2026-06-01',payment:'Credit Card',amount:80},
+    {id:2,customerId:2,packageId:3,date:'2026-06-05',payment:'Cash',amount:140},
+  ],
+  nextClassId: 26,
+  nextCustomerId: 6,
+  nextSaleId: 3,
+  nextRegId: 3,
+};
+
+// ════════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════════
+let currentUser = null; // {type:'customer'|'instructor', id, data}
+let currentFilter = 'all';
+let pendingBook = null;
+let pendingPurchase = null;
+
+// ════════════════════════════════════════════════════════════
+//  ROUTING
+// ════════════════════════════════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a,.nav-links button').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const nav = document.getElementById('nav-' + name);
+  if (nav) nav.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (name === 'schedule')    renderSchedule();
+  if (name === 'packages')    renderPackages();
+  if (name === 'dashboard')   renderDashboard();
+  if (name === 'profile')     renderProfile();
+  if (name === 'instructor')  renderInstructorPortal();
+}
+
+// ════════════════════════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════════════════════════
+function toast(msg, type='') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+// ════════════════════════════════════════════════════════════
+//  MODAL HELPERS
+// ════════════════════════════════════════════════════════════
+function openModal(id)  { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+// ════════════════════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════════════════════
+function openAuthModal(tab='signin') {
+  openModal('auth-modal');
+  switchAuthTab(tab);
+}
+
+function switchAuthTab(tab) {
+  document.getElementById('signin-form').classList.toggle('hidden', tab !== 'signin');
+  document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
+  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+}
+
+function signIn() {
+  const email = document.getElementById('signin-email').value.trim().toLowerCase();
+  const pwd   = document.getElementById('signin-password').value;
+  if (!email || !pwd) { toast('Please enter email and password.', 'error'); return; }
+
+  // Check instructors first
+  const inst = DB.instructors.find(i => i.email.toLowerCase() === email);
+  if (inst) {
+    currentUser = {type:'instructor', id:inst.id, data:inst};
+    setLoggedIn();
+    closeModal('auth-modal');
+    toast(`Welcome back, ${inst.fname}! 🧘‍♀️`, 'success');
+    showPage('instructor');
+    return;
+  }
+
+  // Check customers
+  const cust = DB.customers.find(c => c.email.toLowerCase() === email);
+  if (cust) {
+    currentUser = {type:'customer', id:cust.id, data:cust};
+    setLoggedIn();
+    closeModal('auth-modal');
+    toast(`Welcome back, ${cust.fname}! 🌿`, 'success');
+    showPage('dashboard');
+    return;
+  }
+  toast('Account not found. Check your email or register.', 'error');
+}
+
+function registerUser() {
+  const fname = document.getElementById('reg-fname').value.trim();
+  const lname = document.getElementById('reg-lname').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const dob   = document.getElementById('reg-dob').value;
+  const gender= document.getElementById('reg-gender').value;
+  const pwd   = document.getElementById('reg-password').value;
+
+  if (!fname||!lname||!email||!pwd) { toast('Please fill in all required fields.','error'); return; }
+  if (pwd.length < 6) { toast('Password must be at least 6 characters.','error'); return; }
+  if (DB.customers.find(c => c.email===email)) { toast('An account with this email already exists.','error'); return; }
+
+  const newCustomer = {
+    id: DB.nextCustomerId++,
+    fname, lname, email, phone, gender, dob,
+    joindate: new Date().toISOString().split('T')[0],
+    classbalance: 0,
+    password: pwd,
+  };
+  DB.customers.push(newCustomer);
+  currentUser = {type:'customer', id:newCustomer.id, data:newCustomer};
+  setLoggedIn();
+  closeModal('auth-modal');
+  toast(`Account created! Welcome to ZenFlow, ${fname}! 🌸`, 'success');
+  showPage('packages');
+}
+
+function setLoggedIn() {
+  document.getElementById('nav-auth-section').classList.add('hidden');
+  document.getElementById('nav-user-section').classList.remove('hidden');
+  if (currentUser.type === 'instructor') {
+    document.getElementById('nav-instructor-section').classList.remove('hidden');
+  }
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('nav-auth-section').classList.remove('hidden');
+  document.getElementById('nav-user-section').classList.add('hidden');
+  document.getElementById('nav-instructor-section').classList.add('hidden');
+  toast('Signed out. See you soon! 🙏');
+  showPage('home');
+}
+
+// ════════════════════════════════════════════════════════════
+//  SCHEDULE
+// ════════════════════════════════════════════════════════════
+function renderSchedule(filter) {
+  if (filter !== undefined) currentFilter = filter;
+  const grid = document.getElementById('classes-grid');
+  let list = [...DB.classes];
+  if (currentFilter !== 'all') list = list.filter(c => c.difficulty === currentFilter);
+  list.sort((a,b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+
+  // Group by date
+  const byDate = {};
+  list.forEach(c => { (byDate[c.date] = byDate[c.date]||[]).push(c); });
+
+  grid.innerHTML = '';
+  Object.entries(byDate).forEach(([date, classes]) => {
+    const dateHeader = document.createElement('div');
+    dateHeader.style.cssText = 'grid-column:1/-1;padding:.5rem 0;border-bottom:2px solid var(--sage-bg);margin-bottom:.25rem;';
+    const d = new Date(date+'T00:00:00');
+    dateHeader.innerHTML = `<h3 style="color:var(--sage-d)">${d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</h3>`;
+    grid.appendChild(dateHeader);
+
+    classes.forEach(cls => {
+      const inst = DB.instructors.find(i => i.id === cls.instructorId);
+      const pct  = Math.round(((cls.total - cls.spots) / cls.total) * 100);
+      const isBooked = currentUser?.type==='customer' &&
+                       DB.registrations.some(r => r.customerId===currentUser.id && r.classId===cls.id && r.status!=='CANCELLED');
+      const isFull = cls.spots === 0;
+      const fillClass = pct >= 90 ? 'full' : pct >= 70 ? 'low' : '';
+
+      const card = document.createElement('div');
+      card.className = 'class-card';
+      card.innerHTML = `
+        <div class="class-card-header">
+          <h3>${cls.name}</h3>
+          <div class="class-meta">
+            <span>🕐 ${fmtTime(cls.start)} – ${fmtTime(cls.end)}</span>
+            <span><span class="badge badge-sage">${cls.difficulty}</span></span>
+            ${cls.temp ? `<span>🌡️ ${cls.temp}°F</span>` : ''}
+          </div>
+        </div>
+        <div class="class-card-body">
+          <p style="font-size:.87rem;color:var(--mid);">${cls.desc||''}</p>
+          ${inst ? `<p class="mt-1" style="font-size:.83rem;">👤 <strong>${inst.fname} ${inst.lname}</strong> · ${inst.specialty}</p>` : ''}
+          <div style="margin-top:.75rem;">
+            <div class="flex justify-between" style="font-size:.78rem;color:var(--mid);margin-bottom:.3rem;">
+              <span>${isFull ? '🔴 Full' : `${cls.spots} spot${cls.spots!==1?'s':''} left`}</span>
+              <span>${cls.total - cls.spots}/${cls.total} enrolled</span>
+            </div>
+            <div class="spots-bar"><div class="spots-fill ${fillClass}" style="width:${pct}%"></div></div>
+          </div>
+          <div class="mt-2">
+            ${isBooked
+              ? `<span class="badge badge-green">✓ Booked</span>`
+              : isFull
+                ? `<button class="btn btn-ghost btn-sm" disabled>Class Full</button>`
+                : `<button class="btn btn-primary btn-sm" onclick="openBookModal(${cls.id})">Book Class</button>`
+            }
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  });
+  if (grid.innerHTML === '') grid.innerHTML = '<p class="muted">No classes found for this filter.</p>';
+}
+
+function filterClasses(val, el) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderSchedule(val);
+}
+
+function fmtTime(t) {
+  const [h,m] = t.split(':');
+  const hour = parseInt(h);
+  return `${hour > 12 ? hour-12 : hour||12}:${m} ${hour >= 12 ? 'PM' : 'AM'}`;
+}
+
+function fmtDate(d) {
+  return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+
+// ════════════════════════════════════════════════════════════
+//  BOOKING
+// ════════════════════════════════════════════════════════════
+function openBookModal(classId) {
+  if (!currentUser || currentUser.type !== 'customer') {
+    toast('Please sign in to book a class.', 'error');
+    openAuthModal('signin');
+    return;
+  }
+  const cls  = DB.classes.find(c => c.id === classId);
+  const inst = DB.instructors.find(i => i.id === cls.instructorId);
+  const cust = DB.customers.find(c => c.id === currentUser.id);
+  pendingBook = classId;
+
+  document.getElementById('book-class-name').textContent = cls.name;
+  document.getElementById('book-details').innerHTML = `
+    <p>📅 ${fmtDate(cls.date)} · 🕐 ${fmtTime(cls.start)} – ${fmtTime(cls.end)}</p>
+    <p class="mt-1">👤 ${inst ? inst.fname+' '+inst.lname : 'TBD'} · <span class="badge badge-sage">${cls.difficulty}</span></p>
+    <p class="mt-1">${cls.desc}</p>`;
+
+  const hasBalance = cust.classbalance > 0;
+  document.getElementById('book-balance-info').innerHTML = `
+    <div class="flex justify-between items-center">
+      <div>
+        <p class="bold">Your class balance</p>
+        <p class="muted" style="font-size:.85rem;">Each booking uses 1 credit</p>
+      </div>
+      <div style="font-size:1.8rem;font-weight:700;color:${hasBalance?'var(--sage)':'var(--danger)'}">
+        ${cust.classbalance} <span style="font-size:.9rem;font-weight:400;color:var(--mid);">credits</span>
+      </div>
+    </div>
+    ${!hasBalance ? '<p style="color:var(--danger);font-size:.85rem;margin-top:.5rem;">⚠️ You need credits to book. <a href="#" onclick="closeModal(\'book-modal\');showPage(\'packages\')" style="color:var(--sage);">Buy a package →</a></p>' : ''}`;
+
+  document.getElementById('confirm-book-btn').disabled = !hasBalance;
+  openModal('book-modal');
+}
+
+function confirmBook() {
+  const cls  = DB.classes.find(c => c.id === pendingBook);
+  const cust = DB.customers.find(c => c.id === currentUser.id);
+
+  // Validate
+  if (cust.classbalance <= 0) { toast('Insufficient class balance.', 'error'); return; }
+  if (cls.spots <= 0)          { toast('No spots available.', 'error'); return; }
+  if (DB.registrations.some(r => r.customerId===cust.id && r.classId===cls.id && r.status!=='CANCELLED')) {
+    toast('You are already registered for this class.', 'error'); return;
+  }
+
+  // Triggers (SQL emulation)
+  DB.registrations.push({
+    id: DB.nextRegId++, customerId: cust.id,
+    classId: cls.id, date: new Date().toISOString().split('T')[0], status: 'REGISTERED'
+  });
+  cust.classbalance -= 1;  // trg_UpdateBalanceAndSpotsAfterRegister
+  cls.spots -= 1;           // trg_UpdateBalanceAndSpotsAfterRegister
+
+  currentUser.data = cust;
+  closeModal('book-modal');
+  toast(`Booked! See you in ${cls.name}. 🧘‍♀️`, 'success');
+  renderSchedule();
+}
+
+// ════════════════════════════════════════════════════════════
+//  PACKAGES & MEMBERSHIPS
+// ════════════════════════════════════════════════════════════
+function renderPackages() {
+  // Memberships
+  const mg = document.getElementById('memberships-grid');
+  mg.innerHTML = DB.membershipTypes.map(m => `
+    <div class="pkg-card ${m.popular?'popular':''}">
+      <h3>${m.name}</h3>
+      <div class="pkg-price">$${m.price}<span>/mo</span></div>
+      <p class="pkg-classes">${m.classes ? m.classes+' classes/month' : 'Unlimited classes'}</p>
+      <p class="muted" style="font-size:.85rem;margin-bottom:1.5rem;">${m.desc}</p>
+      <button class="btn btn-primary btn-full" onclick="openPurchaseModal('membership',${m.id})">Get Started</button>
+    </div>`).join('');
+
+  // Class packages
+  const pg = document.getElementById('packages-grid');
+  pg.innerHTML = DB.packages.map(p => `
+    <div class="pkg-card">
+      <h3>${p.desc}</h3>
+      <div class="pkg-price">$${p.price}<span>${p.numClasses>1?' total':''}</span></div>
+      <p class="pkg-classes">${p.numClasses} class credit${p.numClasses>1?'s':''}</p>
+      <p class="muted" style="font-size:.85rem;margin-bottom:1.5rem;">$${(p.price/p.numClasses).toFixed(2)} per class</p>
+      <button class="btn btn-warm btn-full" onclick="openPurchaseModal('package',${p.id})">Purchase</button>
+    </div>`).join('');
+}
+
+function openPurchaseModal(type, id) {
+  if (!currentUser || currentUser.type !== 'customer') {
+    toast('Please sign in to purchase.', 'error');
+    openAuthModal('signin');
+    return;
+  }
+  pendingPurchase = {type, id};
+  if (type === 'package') {
+    const pkg = DB.packages.find(p => p.id === id);
+    document.getElementById('purchase-title').textContent = 'Purchase ' + pkg.desc;
+    document.getElementById('purchase-details').innerHTML = `
+      <div class="card" style="background:var(--sage-bg);">
+        <div class="flex justify-between items-center">
+          <div><strong>${pkg.desc}</strong><p class="muted">${pkg.numClasses} class credit${pkg.numClasses>1?'s':''}</p></div>
+          <div style="font-size:1.8rem;font-weight:700;color:var(--sage);">$${pkg.price}</div>
+        </div>
+      </div>`;
+  } else {
+    const m = DB.membershipTypes.find(mt => mt.id === id);
+    document.getElementById('purchase-title').textContent = m.name + ' Membership';
+    document.getElementById('purchase-details').innerHTML = `
+      <div class="card" style="background:var(--sage-bg);">
+        <div class="flex justify-between items-center">
+          <div><strong>${m.name}</strong><p class="muted">${m.desc}</p></div>
+          <div style="font-size:1.8rem;font-weight:700;color:var(--sage);">$${m.price}<span style="font-size:.9rem;font-weight:400;color:var(--mid);">/mo</span></div>
+        </div>
+      </div>`;
+  }
+  openModal('purchase-modal');
+}
+
+function confirmPurchase() {
+  if (!pendingPurchase) return;
+  const payType = document.getElementById('purchase-payment').value;
+  const cust    = DB.customers.find(c => c.id === currentUser.id);
+
+  if (pendingPurchase.type === 'package') {
+    const pkg = DB.packages.find(p => p.id === pendingPurchase.id);
+    DB.sales.push({
+      id: DB.nextSaleId++, customerId: cust.id,
+      packageId: pkg.id, date: new Date().toISOString().split('T')[0],
+      payment: payType, amount: pkg.price
+    });
+    cust.classbalance += pkg.numClasses; // trg_UpdateClassBalanceAfterSale
+    currentUser.data = cust;
+    closeModal('purchase-modal');
+    toast(`Purchase complete! ${pkg.numClasses} credits added. 🎉`, 'success');
+  } else {
+    const m = DB.membershipTypes.find(mt => mt.id === pendingPurchase.id);
+    closeModal('purchase-modal');
+    toast(`Membership activated: ${m.name}! Welcome aboard. 🌿`, 'success');
+    if (m.classes) {
+      cust.classbalance += m.classes;
+      toast(`${m.classes} credits added to your account.`, 'success');
+    }
+  }
+  pendingPurchase = null;
+}
+
+// ════════════════════════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════════════════════════
+function renderDashboard() {
+  if (!currentUser) return;
+  const cust  = DB.customers.find(c => c.id === currentUser.id);
+  const myRegs = DB.registrations.filter(r => r.customerId === cust.id);
+  const upcoming = myRegs.filter(r => r.status === 'REGISTERED');
+  const attended = myRegs.filter(r => r.status === 'ATTENDED');
+  const mySales  = DB.sales.filter(s => s.customerId === cust.id);
+
+  document.getElementById('dash-name').textContent = cust.fname;
+  document.getElementById('stat-balance').textContent  = cust.classbalance;
+  document.getElementById('stat-upcoming').textContent = upcoming.length;
+  document.getElementById('stat-attended').textContent = attended.length;
+  document.getElementById('stat-membership').textContent = '—';
+
+  // Upcoming classes
+  const list = document.getElementById('my-classes-list');
+  if (upcoming.length === 0) {
+    list.innerHTML = `<div class="card text-center" style="padding:2rem;color:var(--mid);">
+      <p>No upcoming classes.</p>
+      <button class="btn btn-primary btn-sm mt-2" onclick="showPage('schedule')">Browse Schedule</button>
+    </div>`;
+  } else {
+    list.innerHTML = upcoming.map(r => {
+      const cls  = DB.classes.find(c => c.id === r.classId);
+      const inst = DB.instructors.find(i => i.id === cls?.instructorId);
+      if (!cls) return '';
+      return `<div class="card" style="padding:1rem 1.2rem;">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="bold">${cls.name}</p>
+            <p class="muted" style="font-size:.82rem;">📅 ${fmtDate(cls.date)} · 🕐 ${fmtTime(cls.start)}</p>
+            ${inst ? `<p class="muted" style="font-size:.82rem;">👤 ${inst.fname} ${inst.lname}</p>` : ''}
+          </div>
+          <div>
+            <span class="badge badge-green">Registered</span>
+            <button class="btn btn-danger btn-sm" style="margin-top:.4rem;" onclick="cancelRegistration(${r.id})">Cancel</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Sales history
+  const salesList = document.getElementById('my-sales-list');
+  if (mySales.length === 0) {
+    salesList.innerHTML = `<div class="card text-center" style="padding:2rem;color:var(--mid);">
+      <p>No purchases yet.</p>
+      <button class="btn btn-warm btn-sm mt-2" onclick="showPage('packages')">View Packages</button>
+    </div>`;
+  } else {
+    salesList.innerHTML = mySales.map(s => {
+      const pkg = DB.packages.find(p => p.id === s.packageId);
+      return `<div class="card" style="padding:1rem 1.2rem;">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="bold">${pkg?.desc || 'Package'}</p>
+            <p class="muted" style="font-size:.82rem;">📅 ${fmtDate(s.date)} · 💳 ${s.payment}</p>
+          </div>
+          <div style="font-size:1.2rem;font-weight:700;color:var(--sage);">$${s.amount}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function cancelRegistration(regId) {
+  const reg  = DB.registrations.find(r => r.id === regId);
+  const cls  = DB.classes.find(c => c.id === reg?.classId);
+  const cust = DB.customers.find(c => c.id === currentUser.id);
+  if (!reg || !cls) return;
+
+  reg.status = 'CANCELLED'; // trg_RestoreOnCancellation
+  cust.classbalance += 1;   // restore credit
+  cls.spots += 1;            // restore spot
+  currentUser.data = cust;
+  toast(`Cancelled ${cls.name}. 1 credit restored.`);
+  renderDashboard();
+}
+
+// ════════════════════════════════════════════════════════════
+//  PROFILE
+// ════════════════════════════════════════════════════════════
+function renderProfile() {
+  if (!currentUser) return;
+  const cust = DB.customers.find(c => c.id === currentUser.id);
+  const initials = (cust.fname[0]||'?') + (cust.lname[0]||'');
+  document.getElementById('prof-avatar').textContent = initials;
+  document.getElementById('prof-fullname').textContent = cust.fname + ' ' + cust.lname;
+  document.getElementById('prof-email-display').textContent = cust.email;
+  document.getElementById('prof-member-since').textContent = 'Member since ' + fmtDate(cust.joindate);
+  document.getElementById('prof-fname').value  = cust.fname;
+  document.getElementById('prof-lname').value  = cust.lname;
+  document.getElementById('prof-email').value  = cust.email;
+  document.getElementById('prof-phone').value  = cust.phone||'';
+  document.getElementById('prof-dob').value    = cust.dob||'';
+  document.getElementById('prof-gender').value = cust.gender||'';
+  document.getElementById('prof-membership-badge').innerHTML =
+    `<span class="badge badge-sage">💳 ${cust.classbalance} credits</span>`;
+}
+
+function saveProfile(e) {
+  e.preventDefault();
+  const cust = DB.customers.find(c => c.id === currentUser.id);
+  cust.fname  = document.getElementById('prof-fname').value.trim();
+  cust.lname  = document.getElementById('prof-lname').value.trim();
+  cust.email  = document.getElementById('prof-email').value.trim();
+  cust.phone  = document.getElementById('prof-phone').value.trim();
+  cust.dob    = document.getElementById('prof-dob').value;
+  cust.gender = document.getElementById('prof-gender').value;
+  currentUser.data = cust;
+  toast('Profile updated! ✓', 'success');
+  renderProfile();
+}
+
+// ════════════════════════════════════════════════════════════
+//  INSTRUCTOR PORTAL
+// ════════════════════════════════════════════════════════════
+function renderInstructorPortal() {
+  if (!currentUser || currentUser.type !== 'instructor') return;
+  const inst = DB.instructors.find(i => i.id === currentUser.id);
+  const myClasses = DB.classes.filter(c => c.instructorId === inst.id);
+
+  const initials = (inst.fname[0]||'?') + (inst.lname[0]||'');
+  document.getElementById('inst-avatar').textContent    = initials;
+  document.getElementById('inst-name').textContent      = inst.fname + ' ' + inst.lname;
+  document.getElementById('inst-specialty').textContent = inst.specialty;
+  document.getElementById('inst-class-count').textContent = myClasses.length + ' classes';
+
+  // Set default date to today
+  document.getElementById('sched-date').value = new Date().toISOString().split('T')[0];
+
+  // My classes list
+  const list = document.getElementById('instructor-classes-list');
+  if (myClasses.length === 0) {
+    list.innerHTML = '<p class="muted">No classes scheduled yet. Use the form to add one.</p>';
+    return;
+  }
+  const sorted = [...myClasses].sort((a,b) => a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
+  list.innerHTML = sorted.map(cls => {
+    const enrolled = cls.total - cls.spots;
+    const regs = DB.registrations.filter(r => r.classId === cls.id && r.status !== 'CANCELLED');
+    return `<div class="my-class-item">
+      <div>
+        <p class="bold">${cls.name}</p>
+        <p class="muted" style="font-size:.82rem;">📅 ${fmtDate(cls.date)} · 🕐 ${fmtTime(cls.start)} – ${fmtTime(cls.end)}</p>
+        <p class="muted" style="font-size:.82rem;"><span class="badge badge-sage">${cls.difficulty}</span> · ${enrolled}/${cls.total} enrolled</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="viewRoster(${cls.id})">View Roster</button>
+    </div>`;
+  }).join('');
+}
+
+function scheduleClass(e) {
+  e.preventDefault();
+  const inst = DB.instructors.find(i => i.id === currentUser.id);
+  const start = document.getElementById('sched-start').value;
+  const end   = document.getElementById('sched-end').value;
+  const date  = document.getElementById('sched-date').value;
+  const spots = parseInt(document.getElementById('sched-spots').value)||20;
+  const temp  = parseFloat(document.getElementById('sched-temp').value)||72;
+
+  if (start >= end) { toast('End time must be after start time.', 'error'); return; }
+
+  const newClass = {
+    id: DB.nextClassId++,
+    name:     document.getElementById('sched-name').value.trim(),
+    temp,
+    start,
+    end,
+    date,
+    spots,
+    total: spots,
+    instructorId: inst.id,
+    difficulty: document.getElementById('sched-diff').value,
+    desc: document.getElementById('sched-desc').value.trim(),
+  };
+  DB.classes.push(newClass);
+
+  // Reset form
+  document.getElementById('schedule-form').reset();
+  document.getElementById('sched-date').value = new Date().toISOString().split('T')[0];
+
+  toast(`Class "${newClass.name}" added to schedule! ✓`, 'success');
+  renderInstructorPortal();
+}
+
+function viewRoster(classId) {
+  const cls  = DB.classes.find(c => c.id === classId);
+  const regs = DB.registrations.filter(r => r.classId === classId && r.status !== 'CANCELLED');
+  const section = document.getElementById('roster-section');
+
+  if (regs.length === 0) {
+    section.innerHTML = `<div class="card"><p class="muted">No students registered for <strong>${cls.name}</strong> yet.</p></div>`;
+    return;
+  }
+
+  const rows = regs.map(r => {
+    const cust = DB.customers.find(c => c.id === r.customerId);
+    if (!cust) return '';
+    const statusBadge = r.status==='ATTENDED'?'badge-green':r.status==='CANCELLED'?'badge-red':'badge-gold';
+    return `<tr>
+      <td>${cust.fname} ${cust.lname}</td>
+      <td>${cust.email}</td>
+      <td>${cust.phone||'—'}</td>
+      <td><span class="badge ${statusBadge}">${r.status}</span></td>
+      <td>${fmtDate(r.date)}</td>
+      ${r.status==='REGISTERED' ? `<td><button class="btn btn-ghost btn-sm" onclick="markAttended(${r.id})">Mark Attended</button></td>` : '<td></td>'}
+    </tr>`;
+  }).join('');
+
+  section.innerHTML = `
+    <h3 style="margin-bottom:.75rem;">Roster: ${cls.name} · ${fmtDate(cls.date)}</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Registered</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function markAttended(regId) {
+  const reg = DB.registrations.find(r => r.id === regId);
+  if (reg) {
+    reg.status = 'ATTENDED';
+    toast('Marked as attended ✓', 'success');
+    const cls = DB.classes.find(c => c.id === reg.classId);
+    if (cls) viewRoster(cls.id);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  HOME PAGE RENDERS
+// ════════════════════════════════════════════════════════════
+function renderInstructorCards() {
+  const grid = document.getElementById('instructors-grid');
+  grid.innerHTML = DB.instructors.map(inst => {
+    const initials = inst.fname[0] + inst.lname[0];
+    const colors   = ['#6b8f71','#c9a96e','#74b9ff','#a29bfe','#fd79a8'];
+    const color    = colors[inst.id % colors.length];
+    return `<div class="card card-hover" style="text-align:center;padding:2rem;">
+      <div style="width:70px;height:70px;border-radius:50%;background:${color};color:white;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;margin:0 auto 1rem;">${initials}</div>
+      <h3>${inst.fname} ${inst.lname}</h3>
+      <p class="muted" style="font-size:.82rem;margin-top:.3rem;">${inst.specialty}</p>
+      <p style="font-size:.85rem;margin-top:.75rem;color:var(--mid);">${inst.bio.substring(0,100)}…</p>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════
+renderInstructorCards();
+renderSchedule();
+renderPackages();
+</script>
+
+<!-- FOOTER -->
+<footer style="background:var(--charcoal);color:var(--light);padding:3rem 2rem 2rem;margin-top:4rem;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;margin-bottom:2rem;">
+      <div>
+        <div style="font-size:1.4rem;font-weight:700;color:var(--sage-l);margin-bottom:.75rem;">Zen<span style="color:var(--warm);">Flow</span></div>
+        <p style="font-size:.85rem;line-height:1.6;">A modern yoga studio management platform. Book classes, track your practice, and find your flow.</p>
+      </div>
+      <div>
+        <p style="font-weight:600;color:white;margin-bottom:.75rem;">Quick Links</p>
+        <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.88rem;">
+          <a href="#" onclick="showPage('home')" style="color:var(--light);hover:color:white;">Home</a>
+          <a href="#" onclick="showPage('schedule')" style="color:var(--light);">Class Schedule</a>
+          <a href="#" onclick="showPage('packages')" style="color:var(--light);">Memberships</a>
+          <a href="#" onclick="openAuthModal('register')" style="color:var(--light);">Join Now</a>
+        </div>
+      </div>
+      <div>
+        <p style="font-weight:600;color:white;margin-bottom:.75rem;">Studio Hours</p>
+        <div style="font-size:.88rem;line-height:1.8;">
+          <p>Mon – Fri: 6:00 AM – 9:00 PM</p>
+          <p>Saturday: 7:00 AM – 7:00 PM</p>
+          <p>Sunday: 8:00 AM – 6:00 PM</p>
+        </div>
+      </div>
+      <div>
+        <p style="font-weight:600;color:white;margin-bottom:.75rem;">Contact</p>
+        <div style="font-size:.88rem;line-height:1.8;">
+          <p>📍 123 Lotus Lane, Suite 100</p>
+          <p>📞 (555) 936-9669</p>
+          <p>✉️ hello@zenflow.studio</p>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid #444;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <p style="font-size:.82rem;">© 2026 ZenFlow Yoga Studio. All rights reserved.</p>
+      <p style="font-size:.82rem;color:var(--sage-l);">
+        ✦ Built for <strong style="color:white;">Braden Bourgeois</strong> · Portfolio Project
+        <span style="color:var(--mid);margin-left:.5rem;">· SQL + Full-Stack Demo</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
