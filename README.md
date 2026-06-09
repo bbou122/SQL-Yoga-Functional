@@ -1,6 +1,6 @@
 # ZenFlow Yoga Studio — Full-Stack Database & Web Application
 
-**Portfolio project by Braden Bourgeois** | [LinkedIn](#) | [Email](mailto:braden.bourg@gmail.com)
+**Portfolio project by Braden Bourgeois** | [Site](https://bbou122.github.io/SQL-Yoga-Functional/) | [Email](mailto:braden.bourg@gmail.com)
 
 ---
 
